@@ -141,3 +141,11 @@ def registrar_atencion():
     cita = pendientes[int(sel) - 1]
     cita.marcar_atendida(pedir("Diagnóstico:"))
     mostrar("✔ Atención registrada.\n\n" + str(cita))
+
+def ver_historial():
+    p = rp.buscar_por_dni(pedir("DNI del paciente:", validar_dni))
+    if not p: return mostrar("Paciente no encontrado.")
+    if not p.historial: return mostrar(f"{p}\n\nSin atenciones registradas.")
+    mostrar(f"HISTORIAL MÉDICO\n{p}\n\n" + "\n\n".join(
+        f"{i}. {h['fecha']} | Motivo: {h['motivo']} | Dx: {h['diagnostico']} | Médico: {h['medico']}"
+        for i, h in enumerate(p.historial, 1)))
