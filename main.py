@@ -38,3 +38,22 @@ class RepositorioPacientes:
     def buscar_por_dni(self, dni): return next((p for p in self._p if p.coincide_dni(dni)), None)
 
     def registrar(self, p): self._p.append(p)
+
+class RepositorioCitas:
+    def __init__(self): self._c = []
+
+    def existe_duplicada(self, p, fecha, hora):
+        return any(c.paciente._dni_hash == p._dni_hash and c.fecha == fecha and c.hora == hora for c in self._c)
+
+    def registrar(self, cita):
+        if self.existe_duplicada(cita.paciente, cita.fecha, cita.hora):
+            raise DatoInvalidoError("Este paciente ya tiene una cita en esa fecha y hora.")
+        self._c.append(cita)
+
+    def listar_todas(self): return list(self._c)
+
+    def buscar_por_dni(self, dni): return [c for c in self._c if c.paciente.coincide_dni(dni)]
+
+    def filtrar_por_fecha(self, f): return [c for c in self._c if c.fecha == f]
+
+    def programadas(self): return [c for c in self._c if c.estado == "programada"]
