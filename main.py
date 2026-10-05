@@ -150,14 +150,14 @@ def ver_historial():
         f"{i}. {h['fecha']} | Motivo: {h['motivo']} | Dx: {h['diagnostico']} | Médico: {h['medico']}"
         for i, h in enumerate(p.historial, 1)))
 
-    botones = tk.Frame(ventana);
-    botones.pack(side="left", fill="y", padx=10, pady=10)
-    tk.Label(botones, text="MENÚ", font=("Arial", 12, "bold")).pack(pady=(0, 8))
-    for texto, funcion in [("Registrar nueva cita", registrar_cita), ("Listar todas las citas", listar_citas),
-                           ("Buscar citas por DNI", buscar_por_dni), ("Registrar atención", registrar_atencion),
-                           ("Ver historial médico", ver_historial), ("Reporte por fecha", reporte_por_fecha),
-                           ("Salir", ventana.destroy)]:
-        tk.Button(botones, text=texto, width=24, pady=6, command=lambda f=funcion: ejecutar(f)).pack(pady=3)
-    pantalla.pack(side="right", fill="both", expand=True, padx=(0, 10), pady=10)
-    mostrar("Bienvenido al sistema de citas.\n\nElija una opción del menú.")
-    ventana.mainloop()
+botones = tk.Frame(ventana);
+botones.pack(side="left", fill="y", padx=10, pady=10)
+tk.Label(botones, text="MENÚ", font=("Arial", 12, "bold")).pack(pady=(0, 8))
+for texto, funcion in [("Registrar nueva cita", registrar_cita), ("Listar todas las citas", listar_citas),
+                       ("Buscar citas por DNI", buscar_por_dni), ("Registrar atención", registrar_atencion),
+                       ("Ver historial médico", ver_historial), ("Reporte por fecha", reporte_por_fecha),
+                       ("Salir", ventana.destroy)]:
+    tk.Button(botones, text=texto, width=24, pady=6, command=lambda f=funcion: ejecutar(f)).pack(pady=3)
+pantalla.pack(side="right", fill="both", expand=True, padx=(0, 10), pady=10)
+mostrar("Bienvenido al sistema de citas.\n\nElija una opción del menú.")
+ventana.mainloop()
