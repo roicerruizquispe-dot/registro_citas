@@ -74,3 +74,26 @@ validar_dni = _validador("El DNI debe tener 8 dígitos.", lambda x: re.fullmatch
 validar_telefono = _validador("El teléfono debe tener 9 dígitos.", lambda x: re.fullmatch(r"\d{9}", x))
 validar_fecha = _validador("Formato de fecha inválido (dd/mm/aaaa).", _es_fecha("%d/%m/%Y"))
 validar_hora = _validador("Formato de hora inválido (HH:MM).", _es_fecha("%H:%M"))
+
+rc, rp = RepositorioCitas(), RepositorioPacientes()
+ventana = tk.Tk(); ventana.title("Registro de Citas"); ventana.geometry("820x480")
+pantalla = tk.Text(ventana, font=("Consolas", 10), wrap="word", state="disabled")
+def mostrar(texto):
+    pantalla.config(state="normal"); pantalla.delete("1.0", "end")
+    pantalla.insert("end", texto); pantalla.config(state="disabled")
+def pedir(msg, validador=None):
+    while True:
+        v = simpledialog.askstring("Dato", msg, parent=ventana)
+        if v is None: raise Cancelado()
+        try:
+            v = v.strip()
+            if validador: return validador(v)
+            if v: return v
+            raise DatoInvalidoError("No puede estar vacío.")
+        except DatoInvalidoError as e:
+            messagebox.showerror("Error", str(e))
+def ejecutar(f):
+    try: f()
+    except Cancelado: pass
+def lista(citas, vacio, titulo):
+    mostrar(f"{len(citas)} {titulo}:\n\n" + "\n\n".join(map(str, citas)) if citas else vacio)
