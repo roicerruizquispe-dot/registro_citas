@@ -118,3 +118,12 @@ def registrar_cita():
     if nuevo: rp.registrar(nuevo)
     rc.registrar(Cita(p, fecha, hora, motivo, medico))
     mostrar("✔ Cita registrada correctamente.")
+
+def listar_citas():
+    lista(rc.listar_todas(), "No hay citas registradas.", "cita(s) registrada(s)")
+def buscar_por_dni():
+    lista(rc.buscar_por_dni(pedir("DNI a buscar (8 dígitos):", validar_dni)),
+          "No se encontraron citas.", "cita(s) encontrada(s)")
+def reporte_por_fecha():
+    fecha = pedir("Fecha (dd/mm/aaaa):", validar_fecha)
+    lista(rc.filtrar_por_fecha(fecha), f"Sin citas para el {fecha}.", f"cita(s) el {fecha}")
