@@ -57,3 +57,20 @@ class RepositorioCitas:
     def filtrar_por_fecha(self, f): return [c for c in self._c if c.fecha == f]
 
     def programadas(self): return [c for c in self._c if c.estado == "programada"]
+
+def _validador(msg, ok):
+    def v(x):
+        if not ok(x): raise DatoInvalidoError(msg)
+        return x
+    return v
+
+def _es_fecha(formato):
+    def ok(x):
+        try: return bool(datetime.strptime(x, formato))
+        except ValueError: return False
+    return ok
+
+validar_dni = _validador("El DNI debe tener 8 dígitos.", lambda x: re.fullmatch(r"\d{8}", x))
+validar_telefono = _validador("El teléfono debe tener 9 dígitos.", lambda x: re.fullmatch(r"\d{9}", x))
+validar_fecha = _validador("Formato de fecha inválido (dd/mm/aaaa).", _es_fecha("%d/%m/%Y"))
+validar_hora = _validador("Formato de hora inválido (HH:MM).", _es_fecha("%H:%M"))
