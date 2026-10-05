@@ -97,3 +97,24 @@ def ejecutar(f):
     except Cancelado: pass
 def lista(citas, vacio, titulo):
     mostrar(f"{len(citas)} {titulo}:\n\n" + "\n\n".join(map(str, citas)) if citas else vacio)
+
+def registrar_cita():
+    dni = pedir("DNI (8 dígitos):", validar_dni)
+    p = rp.buscar_por_dni(dni)
+    nuevo = None
+    if not p:
+        nombres = pedir("Paciente nuevo.\nNombres:")
+        apellidos = pedir("Apellidos:")
+        fnac = pedir("Fecha de nacimiento (dd/mm/aaaa):", validar_fecha)
+        tel = pedir("Teléfono (9 dígitos):", validar_telefono)
+        p = nuevo = Paciente(nombres, apellidos, dni, fnac, tel)
+    while True:
+        fecha = pedir("Fecha de la cita (dd/mm/aaaa):", validar_fecha)
+        hora = pedir("Hora de la cita (HH:MM):", validar_hora)
+        if not rc.existe_duplicada(p, fecha, hora): break
+        messagebox.showerror("Error", "Ya existe una cita para ese paciente en esa fecha y hora.")
+    medico = pedir("Médico:")
+    motivo = pedir("Motivo:")
+    if nuevo: rp.registrar(nuevo)
+    rc.registrar(Cita(p, fecha, hora, motivo, medico))
+    mostrar("✔ Cita registrada correctamente.")
