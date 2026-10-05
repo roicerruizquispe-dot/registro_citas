@@ -43,7 +43,7 @@ class RepositorioCitas:
     def __init__(self): self._c = []
 
     def existe_duplicada(self, p, fecha, hora):
-        return any(c.paciente._dni_hash == p._dni_hash and c.fecha == fecha and c.hora == hora for c in self._c)
+        return any(c.paciente is p and c.fecha == fecha and c.hora == hora for c in self._c)
 
     def registrar(self, cita):
         if self.existe_duplicada(cita.paciente, cita.fecha, cita.hora):
