@@ -127,3 +127,17 @@ def buscar_por_dni():
 def reporte_por_fecha():
     fecha = pedir("Fecha (dd/mm/aaaa):", validar_fecha)
     lista(rc.filtrar_por_fecha(fecha), f"Sin citas para el {fecha}.", f"cita(s) el {fecha}")
+
+def registrar_atencion():
+    pendientes = rc.programadas()
+    if not pendientes: return mostrar("No hay citas programadas.")
+    mostrar("CITAS PROGRAMADAS\n\n" + "\n".join(
+        f"{i}. {c.fecha} {c.hora} - {c.paciente.nombre_completo} ({c.motivo})" for i, c in
+        enumerate(pendientes, 1)))
+    while True:
+        sel = pedir("Número de la cita a atender:")
+        if sel.isdigit() and 1 <= int(sel) <= len(pendientes): break
+        messagebox.showerror("Error", "Opción no válida.")
+    cita = pendientes[int(sel) - 1]
+    cita.marcar_atendida(pedir("Diagnóstico:"))
+    mostrar("✔ Atención registrada.\n\n" + str(cita))
