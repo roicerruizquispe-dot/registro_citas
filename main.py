@@ -16,3 +16,18 @@ class Paciente:
     def __str__(self):
         tel = "*" * (len(self._tel) - 3) + self._tel[-3:]
         return f"{self.nombre_completo} | DNI: ****{self._dni4} | Nac.: {self.fecha_nac} | Tel.: {tel}"
+
+class Cita:
+    def __init__(self, paciente, fecha, hora, motivo, medico):
+        self.paciente, self.fecha, self.hora, self.motivo, self.medico = paciente, fecha, hora, motivo, medico
+        self.estado, self.diagnostico = "programada", None
+
+    def marcar_atendida(self, dx):
+        self.estado, self.diagnostico = "atendida", dx
+        self.paciente.historial.append(
+            {"fecha": self.fecha, "motivo": self.motivo, "diagnostico": dx, "medico": self.medico})
+
+    def __str__(self):
+        s = (f"Cita [{self.estado.upper()}] - {self.fecha} {self.hora}\n"
+             f"  Paciente : {self.paciente}\n  Médico   : {self.medico}\n  Motivo   : {self.motivo}")
+        return s + (f"\n  Diagnóstico: {self.diagnostico}" if self.diagnostico else "")
