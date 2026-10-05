@@ -31,3 +31,10 @@ class Cita:
         s = (f"Cita [{self.estado.upper()}] - {self.fecha} {self.hora}\n"
              f"  Paciente : {self.paciente}\n  Médico   : {self.medico}\n  Motivo   : {self.motivo}")
         return s + (f"\n  Diagnóstico: {self.diagnostico}" if self.diagnostico else "")
+
+class RepositorioPacientes:
+    def __init__(self): self._p = []
+
+    def buscar_por_dni(self, dni): return next((p for p in self._p if p.coincide_dni(dni)), None)
+
+    def registrar(self, p): self._p.append(p)
